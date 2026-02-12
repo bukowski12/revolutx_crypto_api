@@ -1,0 +1,128 @@
+# Revolut X Crypto API Wrapper
+
+A Python client for the [Revolut X Crypto Exchange REST API](https://developer.revolut.com/docs/x-api/revolut-x-crypto-exchange-rest-api). This library handles authentication (Ed25519 signing), request construction, and provides easy access to various trading and market data endpoints.
+
+## Features
+
+- **Full Authentication Support**: Automatic Ed25519 signing with support for both Hex and Base64 (PKCS8/DER) private keys.
+- **Comprehensive API Coverage**:
+  - **Public Market Data**: Symbols/Pairs, Order Book, Last Trades, Candles.
+  - **Account**: Balances.
+  - **Trading**: Place orders (Limit/Market), Get active orders, Cancel orders.
+- **Robust Error Handling**: Dedicated exceptions for authentication, rate limits, and API-specific errors.
+- **Easy Configuration**: Integration with `.env` files.
+
+## Project Structure
+
+```text
+revolutx_crypto_api/
+├── src/
+│   ├── client.py        # Main API Client
+│   ├── utils.py         # Signing and cryptographic utilities
+│   ├── exceptions.py    # Custom Exception classes
+│   ├── balance/         # Account balance endpoints
+│   ├── configuration/   # System configuration (pairs, currencies)
+│   ├── market_data/     # Private market data
+│   ├── public_market_data/ # Public market data (no auth)
+│   ├── orders/          # Order management endpoints
+│   └── trades/          # Trade history endpoints
+├── tests/               # Unit tests
+├── .env                 # API credentials (ignored by git)
+├── .gitignore           # Git ignore rules
+├── requirements.txt     # Python dependencies
+└── live_test_safe.py    # Example script for safe testing
+```
+
+## Installation
+
+1. **Clone the repository**:
+   ```bash
+   git clone <your-repo-url>
+   cd revolutx_crypto_api
+   ```
+
+2. **Create a virtual environment**:
+   ```bash
+   python3 -m venv venv
+   source venv/bin/activate  # On Linux/macOS
+   # venv\Scripts\activate   # On Windows
+   ```
+
+3. **Install dependencies**:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+## Configuration
+
+Create a `.env` file in the root directory with your Revolut X API credentials:
+
+```ini
+api_key=YOUR_API_KEY
+private_key=YOUR_PRIVATE_KEY_BASE64_OR_HEX
+```
+
+> [!IMPORTANT]
+> Keep your `.env` file secret and never commit it to version control. The project is pre-configured with a `.gitignore` to protect it.
+
+## Usage
+
+### Simple Example (Safe Read-Only)
+
+```python
+import os
+from dotenv import load_dotenv
+from src.client import RevolutXClient
+from src.balance.get_all_balances import get_balances
+from src.orders.get_active_orders import get_active_orders
+
+# Load credentials
+load_dotenv()
+client = RevolutXClient(
+    api_key=os.getenv("api_key"),
+    private_key=os.getenv("private_key")
+)
+
+# Get balances
+balances = get_balances(client)
+print("Balances:", balances)
+
+# List active orders
+orders = get_active_orders(client)
+print("Active Orders:", orders)
+```
+
+## Running Tests
+
+To run the unit tests and verify the implementation (mocked requests):
+
+```bash
+python3 -m unittest tests/test_client.py
+```
+
+To run a "live" safe test (against the real API using your `.env`):
+
+```bash
+python3 live_test_safe.py
+```
+
+## Error Handling
+
+The client raises specific exceptions to help you handle different failure modes:
+
+```python
+from src.exceptions import RevolutXAuthenticationError, RevolutXRateLimitError, RevolutXError
+
+try:
+    result = client.send("GET", "/some-endpoint")
+except RevolutXAuthenticationError:
+    print("Authentication failed! Check your keys.")
+except RevolutXRateLimitError:
+    print("Rate limit exceeded. Pause and retry.")
+except RevolutXError as e:
+    print(f"API Error: {e.message}")
+```
+
+## License
+
+MIT
