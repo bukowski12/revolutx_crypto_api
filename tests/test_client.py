@@ -1,8 +1,8 @@
 import unittest
 from unittest.mock import patch, MagicMock
-from src.client import RevolutXClient
-from src.utils import sign_request
-from src.exceptions import RevolutXError, RevolutXAuthenticationError, RevolutXRateLimitError
+from revolutx_crypto_api.client import RevolutXClient
+from revolutx_crypto_api.utils import sign_request
+from revolutx_crypto_api.exceptions import RevolutXError, RevolutXAuthenticationError, RevolutXRateLimitError
 import base64
 import json
 

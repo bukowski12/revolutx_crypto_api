@@ -1,10 +1,10 @@
 import os
 import json
 from dotenv import load_dotenv
-from src.client import RevolutXClient
-from src.configuration.get_all_currency_pairs import get_all_currency_pairs
-from src.balance.get_all_balances import get_balances
-from src.orders.get_active_orders import get_active_orders
+from revolutx_crypto_api.client import RevolutXClient
+from revolutx_crypto_api.configuration.get_all_currency_pairs import get_all_currency_pairs
+from revolutx_crypto_api.balance.get_all_balances import get_balances
+from revolutx_crypto_api.orders.get_active_orders import get_active_orders
 
 def main():
     # Load credentials from .env

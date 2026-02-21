@@ -3,12 +3,8 @@ import requests
 import json
 import logging
 
-try:
-    from .utils import sign_request
-    from .exceptions import RevolutXError, RevolutXAuthenticationError, RevolutXRateLimitError
-except ImportError:
-    from src.utils import sign_request
-    from src.exceptions import RevolutXError, RevolutXAuthenticationError, RevolutXRateLimitError
+from .utils import sign_request
+from .exceptions import RevolutXError, RevolutXAuthenticationError, RevolutXRateLimitError
 
 logger = logging.getLogger(__name__)
 
