@@ -32,6 +32,19 @@ class RevolutXClient:
 
     def send(self, method: str, endpoint: str, params=None, json_body=None):
         method = method.upper()
+        
+        # Parse endpoint for query string if present
+        if "?" in endpoint:
+            endpoint, url_query = endpoint.split("?", 1)
+            from urllib.parse import parse_qs
+            url_params = {k: v[0] if len(v) == 1 else v for k, v in parse_qs(url_query).items()}
+            if params:
+                merged_params = params.copy()
+                merged_params.update(url_params)
+                params = merged_params
+            else:
+                params = url_params
+
         if not endpoint.startswith("/api/"):
             path = f"/api/1.0{endpoint}"
         else:

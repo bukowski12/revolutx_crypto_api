@@ -5,6 +5,7 @@ from revolutx_crypto_api.client import RevolutXClient
 from revolutx_crypto_api.configuration.get_all_currency_pairs import get_all_currency_pairs
 from revolutx_crypto_api.balance.get_all_balances import get_balances
 from revolutx_crypto_api.orders.get_active_orders import get_active_orders
+from revolutx_crypto_api.market_data.get_candles import get_candles
 
 def main():
     # Load credentials from .env
@@ -35,6 +36,12 @@ def main():
         orders = get_active_orders(client)
         print(f"Success! Found {len(orders)} active orders.")
         print(json.dumps(orders, indent=2))
+
+        # 4. Test Candles Endpoint (Safe)
+        print("\n4. Testing Candles Endpoint: get_candles()...")
+        candles = get_candles(client, symbol="BTC-EUR", interval="60")
+        print("Success! Candles retrieved.")
+        print(json.dumps(candles, indent=2))
 
     except Exception as e:
         print(f"\nAn error occurred during the test: {e}")

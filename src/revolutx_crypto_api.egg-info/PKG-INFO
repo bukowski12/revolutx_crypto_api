@@ -33,19 +33,21 @@ A Python client for the [Revolut X Crypto Exchange REST API](https://developer.r
 ```text
 revolutx_crypto_api/
 ├── src/
-│   ├── client.py        # Main API Client
-│   ├── utils.py         # Signing and cryptographic utilities
-│   ├── exceptions.py    # Custom Exception classes
-│   ├── balance/         # Account balance endpoints
-│   ├── configuration/   # System configuration (pairs, currencies)
-│   ├── market_data/     # Private market data
-│   ├── public_market_data/ # Public market data (no auth)
-│   ├── orders/          # Order management endpoints
-│   └── trades/          # Trade history endpoints
+│   └── revolutx_crypto_api/
+│       ├── __init__.py
+│       ├── client.py        # Main API Client
+│       ├── utils.py         # Signing and cryptographic utilities
+│       ├── exceptions.py    # Custom Exception classes
+│       ├── balance/         # Account balance endpoints
+│       ├── configuration/   # System configuration (pairs, currencies)
+│       ├── market_data/     # Private market data
+│       ├── public_market_data/ # Public market data (no auth)
+│       ├── orders/          # Order management endpoints
+│       └── trades/          # Trade history endpoints
 ├── tests/               # Unit tests
 ├── .env                 # API credentials (ignored by git)
 ├── .gitignore           # Git ignore rules
-├── requirements.txt     # Python dependencies
+├── pyproject.toml       # Build system configuration
 └── live_test_safe.py    # Example script for safe testing
 ```
 
@@ -64,9 +66,13 @@ revolutx_crypto_api/
    # venv\Scripts\activate   # On Windows
    ```
 
-3. **Install dependencies**:
+3. **Install the package**:
    ```bash
-   pip install -r requirements.txt
+   pip install .
+   ```
+   Or in editable mode for development:
+   ```bash
+   pip install -e .
    ```
 
 ## Configuration
@@ -88,9 +94,9 @@ private_key=YOUR_PRIVATE_KEY_BASE64_OR_HEX
 ```python
 import os
 from dotenv import load_dotenv
-from src.client import RevolutXClient
-from src.balance.get_all_balances import get_balances
-from src.orders.get_active_orders import get_active_orders
+from revolutx_crypto_api.client import RevolutXClient
+from revolutx_crypto_api.balance.get_all_balances import get_balances
+from revolutx_crypto_api.orders.get_active_orders import get_active_orders
 
 # Load credentials
 load_dotenv()
@@ -127,7 +133,7 @@ python3 live_test_safe.py
 The client raises specific exceptions to help you handle different failure modes:
 
 ```python
-from src.exceptions import RevolutXAuthenticationError, RevolutXRateLimitError, RevolutXError
+from revolutx_crypto_api.exceptions import RevolutXAuthenticationError, RevolutXRateLimitError, RevolutXError
 
 try:
     result = client.send("GET", "/some-endpoint")
