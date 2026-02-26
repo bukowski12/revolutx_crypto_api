@@ -69,6 +69,8 @@ class RevolutXClient:
             if not resp.ok:
                 self._handle_error(resp)
                 
+            if resp.status_code == 204 or not resp.text.strip():
+                return {}
             return resp.json()
         except requests.exceptions.RequestException as e:
             logger.error(f"Network error: {e}")
